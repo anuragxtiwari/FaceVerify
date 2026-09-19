@@ -15,7 +15,7 @@ import os
 import glob
 import numpy as np
 from insightface.model_zoo import get_model
-
+from src import ort_memory_patch  # noqa: F401 — must run before any InsightFace model loads
 from src.config import EMBEDDING_DIM, INSIGHTFACE_MODEL_NAME, CTX_ID, ALIGNED_FACE_SIZE
 
 
