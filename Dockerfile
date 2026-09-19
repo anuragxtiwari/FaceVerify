@@ -13,10 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-
-ENV OMP_NUM_THREADS=1
-ENV OPENBLAS_NUM_THREADS=1
-ENV MKL_NUM_THREADS=1
+# Pre-download InsightFace models at build time so the container doesn't
+# need internet access or a slow first-request download at runtime.
 RUN python -c "from insightface.app import FaceAnalysis; app = FaceAnalysis(name='buffalo_s'); app.prepare(ctx_id=-1, det_size=(320,320))"
 
 EXPOSE 7860

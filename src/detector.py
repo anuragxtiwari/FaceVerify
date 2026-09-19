@@ -14,7 +14,7 @@ import cv2
 import numpy as np
 from insightface.app import FaceAnalysis
 from insightface.utils import face_align
-from src import ort_memory_patch  # noqa: F401 — must run before any InsightFace model loads
+
 from src.config import INSIGHTFACE_MODEL_NAME, CTX_ID, DETECTION_SIZE, ALIGNED_FACE_SIZE
 
 
