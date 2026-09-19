@@ -11,11 +11,10 @@ MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 
 # --- InsightFace model settings ---
-# "buffalo_l" is the standard high-accuracy ArcFace-based model pack.
-INSIGHTFACE_MODEL_NAME = "buffalo_l"
+INSIGHTFACE_MODEL_NAME = "buffalo_s"
 # ctx_id = -1 forces CPU. Set to 0 if you have a working CUDA GPU + onnxruntime-gpu installed.
 CTX_ID = -1
-DETECTION_SIZE = (640, 640)   # detector input size, standard default
+DETECTION_SIZE = (320, 320)   # detector input size, standard default
 
 # --- Alignment ---
 ALIGNED_FACE_SIZE = 112  # ArcFace expects 112x112 aligned crops
