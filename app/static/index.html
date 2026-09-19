@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Face Verification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0E14;
+    --surface: #131820;
+    --surface-hover: #171E28;
+    --border: #232B36;
+    --border-active: #3A4756;
+    --text: #E8ECF1;
+    --text-dim: #7A8699;
+    --accent: #5EEAD4;
+    --accent-dim: #2DD4BF33;
+    --danger: #F87171;
+    --danger-dim: #F8717133;
+    --amber: #FBBF24;
+    --amber-dim: #FBBF2433;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 20px 64px;
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(94,234,212,0.06), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(94,234,212,0.04), transparent 40%);
+  }
+  .app { width: 100%; max-width: 880px; }
+
+  header { margin-bottom: 40px; }
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    margin-bottom: 14px;
+  }
+  .eyebrow-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  header p { color: var(--text-dim); font-size: 15px; max-width: 46ch; }
+
+  .panels {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 640px) {
+    .panels { grid-template-columns: 1fr; }
+    .vs { display: none; }
+  }
+
+  .dropzone {
+    background: var(--surface);
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius);
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .dropzone:hover { background: var(--surface-hover); border-color: var(--border-active); }
+  .dropzone.drag-over { border-color: var(--accent); background: var(--accent-dim); }
+  .dropzone.filled { border-style: solid; padding: 0; }
+  .dropzone img {
+    width: 100%; height: 100%;
+    min-height: 280px;
+    object-fit: cover;
+    display: block;
+  }
+  .dz-icon {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--border-active);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim);
+  }
+  .dz-label { color: var(--text-dim); font-size: 13px; text-align: center; padding: 0 20px; }
+  .dz-sub { color: var(--text-dim); font-size: 11px; opacity: 0.6; }
+  .dz-tag {
+    position: absolute; top: 12px; left: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    background: rgba(10,14,20,0.75);
+    backdrop-filter: blur(4px);
+    padding: 4px 8px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+  }
+  .dz-clear {
+    position: absolute; top: 12px; right: 12px;
+    width: 26px; height: 26px;
+    background: rgba(10,14,20,0.75);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .dz-clear:hover { background: var(--danger-dim); border-color: var(--danger); }
+  input[type=file] { display: none; }
+
+  .vs {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px;
+  }
+  .swap-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .swap-btn:hover { color: var(--accent); border-color: var(--accent); transform: rotate(180deg); }
+
+  .action-row { display: flex; gap: 10px; margin-bottom: 6px; }
+  .scan-btn {
+    flex: 1;
+    background: var(--accent);
+    color: #06201C;
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s ease, opacity 0.15s ease;
+  }
+  .scan-btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .scan-btn:disabled { background: var(--surface); color: var(--text-dim); cursor: not-allowed; border: 1px solid var(--border); }
+  .scan-btn.loading { opacity: 0.7; cursor: wait; }
+  .hint {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 12px;
+    margin-bottom: 24px;
+  }
+  .hint kbd {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 11px;
+  }
+
+  .result {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    display: none;
+    margin-bottom: 24px;
+  }
+  .result.show { display: block; animation: reveal 0.35s ease; }
+  @keyframes reveal { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .result-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .badge-group { display: flex; align-items: center; gap: 8px; }
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 20px;
+  }
+  .badge.same { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent); }
+  .badge.diff { background: var(--danger-dim); color: var(--danger); border: 1px solid var(--danger); }
+  .confidence-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 6px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+  .score-readout { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text-dim); }
+  .score-readout b { color: var(--text); font-size: 15px; }
+
+  .bar-track {
+    position: relative;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: visible;
+    margin: 22px 0 10px;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent), #22D3A0);
+    width: 0%;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bar-fill.diff { background: linear-gradient(90deg, var(--danger), #FB923C); }
+  .threshold-mark {
+    position: absolute;
+    top: -4px;
+    width: 2px;
+    height: 16px;
+    background: var(--text-dim);
+    transition: left 0.15s ease;
+  }
+  .threshold-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 22px;
+  }
+
+  .slider-row {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .slider-label { font-size: 12px; color: var(--text-dim); white-space: nowrap; width: 130px; }
+  input[type=range] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent);
+    cursor: pointer;
+  }
+  .slider-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    width: 56px;
+    text-align: right;
+  }
+
+  .error-box {
+    background: var(--danger-dim);
+    border: 1px solid var(--danger);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    color: var(--text);
+    font-size: 14px;
+    display: none;
+    margin-bottom: 24px;
+  }
+  .error-box.show { display: block; }
+
+  .history {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+  .history-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .history-head h2 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+  .clear-history {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .clear-history:hover { color: var(--danger); border-color: var(--danger); }
+  .history-list { display: flex; flex-direction: column; gap: 8px; }
+  .history-empty { color: var(--text-dim); font-size: 13px; padding: 12px 0; }
+  .history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+  .history-item:hover { border-color: var(--border-active); }
+  .history-thumbs { display: flex; }
+  .history-thumbs img {
+    width: 34px; height: 34px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid var(--bg);
+  }
+  .history-thumbs img:last-child { margin-left: -12px; }
+  .history-info { flex: 1; }
+  .history-score { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .history-time { font-size: 11px; color: var(--text-dim); }
+  .history-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 12px;
+  }
+  .history-badge.same { background: var(--accent-dim); color: var(--accent); }
+  .history-badge.diff { background: var(--danger-dim); color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="eyebrow"><span class="eyebrow-dot"></span>ARCFACE / BUFFALO_L</div>
+    <h1>FaceVerify</h1>
+    <p>Upload two photos. The system detects, aligns, and compares each face, then reports a similarity score against the trained decision threshold.</p>
+  </header>
+
+  <div class="panels">
+    <div class="dropzone" id="dz1" tabindex="0">
+      <span class="dz-tag">IMAGE A</span>
+      <div class="dz-icon">⇪</div>
+      <div class="dz-label">Click or drop a photo</div>
+      <div class="dz-sub">or paste with Ctrl+V</div>
+      <input type="file" id="file1" accept="image/*">
+    </div>
+    <div class="vs"><button class="swap-btn" id="swapBtn" title="Swap images">⇄</button></div>
+    <div class="dropzone" id="dz2" tabindex="0">
+      <span class="dz-tag">IMAGE B</span>
+      <div class="dz-icon">⇪</div>
+      <div class="dz-label">Click or drop a photo</div>
+      <div class="dz-sub">or paste with Ctrl+V</div>
+      <input type="file" id="file2" accept="image/*">
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="scan-btn" id="scanBtn" disabled>Upload both images to compare</button>
+  </div>
+  <div class="hint">Press <kbd>Enter</kbd> to compare once both images are loaded</div>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <div class="result" id="result">
+    <div class="result-top">
+      <div class="badge-group">
+        <span class="badge" id="badge">—</span>
+        <span class="confidence-tag" id="confidenceTag">—</span>
+      </div>
+      <span class="score-readout">similarity <b id="scoreText">0.0000</b></span>
+    </div>
+    <div class="bar-track">
+      <div class="bar-fill" id="barFill"></div>
+      <div class="threshold-mark" id="thresholdMark"></div>
+    </div>
+    <div class="threshold-label">
+      <span>0.00</span>
+      <span id="thresholdText">threshold —</span>
+      <span>1.00</span>
+    </div>
+
+    <div class="slider-row">
+      <span class="slider-label">Decision threshold</span>
+      <input type="range" id="thresholdSlider" min="0" max="1" step="0.001" value="0.35">
+      <span class="slider-value" id="sliderValue">0.350</span>
+    </div>
+  </div>
+
+  <div class="history">
+    <div class="history-head">
+      <h2>RECENT COMPARISONS</h2>
+      <button class="clear-history" id="clearHistoryBtn">Clear</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">No comparisons yet this session.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const state = { file1: null, file2: null, lastSimilarity: null, modelThreshold: null };
+  const HISTORY_KEY = 'faceverify_history';
+  const MAX_HISTORY = 5;
+
+  function setupDropzone(dzId, inputId, key) {
+    const dz = document.getElementById(dzId);
+    const input = document.getElementById(inputId);
+
+    dz.addEventListener('click', () => { if (!state[key]) input.click(); });
+    dz.addEventListener('keydown', e => { if (e.key === 'Enter' && !state[key]) input.click(); });
+
+    input.addEventListener('change', e => {
+      if (e.target.files[0]) loadFile(e.target.files[0], dz, key);
+    });
+
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+    dz.addEventListener('drop', e => {
+      e.preventDefault();
+      dz.classList.remove('drag-over');
+      if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0], dz, key);
+    });
+  }
+
+  function loadFile(file, dz, key) {
+    state[key] = file;
+    const url = URL.createObjectURL(file);
+    const label = dz.id === 'dz1' ? 'IMAGE A' : 'IMAGE B';
+    dz.classList.add('filled');
+    dz.innerHTML = `
+      <span class="dz-tag">${label}</span>
+      <span class="dz-clear" onclick="clearZone(event, '${dz.id}', '${key}')">✕</span>
+      <img src="${url}" alt="${label}">
+    `;
+    updateButton();
+  }
+
+  function clearZone(e, dzId, key) {
+    e.stopPropagation();
+    state[key] = null;
+    const dz = document.getElementById(dzId);
+    const label = dzId === 'dz1' ? 'IMAGE A' : 'IMAGE B';
+    dz.classList.remove('filled');
+    dz.innerHTML = `
+      <span class="dz-tag">${label}</span>
+      <div class="dz-icon">⇪</div>
+      <div class="dz-label">Click or drop a photo</div>
+      <div class="dz-sub">or paste with Ctrl+V</div>
+      <input type="file" id="${key}" accept="image/*">
+    `;
+    document.getElementById(key)
+      .addEventListener('change', ev => { if (ev.target.files[0]) loadFile(ev.target.files[0], dz, key); });
+    updateButton();
+  }
+
+  function updateButton() {
+    const btn = document.getElementById('scanBtn');
+    const ready = state.file1 && state.file2;
+    btn.disabled = !ready;
+    btn.textContent = ready ? 'Compare faces' : 'Upload both images to compare';
+  }
+
+  setupDropzone('dz1', 'file1', 'file1');
+  setupDropzone('dz2', 'file2', 'file2');
+
+  // Swap images
+  document.getElementById('swapBtn').addEventListener('click', () => {
+    if (!state.file1 && !state.file2) return;
+    const dz1 = document.getElementById('dz1');
+    const dz2 = document.getElementById('dz2');
+    const f1 = state.file1, f2 = state.file2;
+
+    // reset both zones, then reload swapped
+    clearZone({ stopPropagation(){} }, 'dz1', 'file1');
+    clearZone({ stopPropagation(){} }, 'dz2', 'file2');
+    if (f2) loadFile(f2, document.getElementById('dz1'), 'file1');
+    if (f1) loadFile(f1, document.getElementById('dz2'), 'file2');
+  });
+
+  // Paste from clipboard -> fills first empty slot
+  document.addEventListener('paste', e => {
+    const items = e.clipboardData.items;
+    for (const item of items) {
+      if (item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (!state.file1) loadFile(file, document.getElementById('dz1'), 'file1');
+        else if (!state.file2) loadFile(file, document.getElementById('dz2'), 'file2');
+        break;
+      }
+    }
+  });
+
+  // Enter key triggers compare
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && state.file1 && state.file2) {
+      const btn = document.getElementById('scanBtn');
+      if (!btn.disabled) btn.click();
+    }
+  });
+
+  document.getElementById('scanBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('scanBtn');
+    const resultBox = document.getElementById('result');
+    const errorBox = document.getElementById('errorBox');
+    resultBox.classList.remove('show');
+    errorBox.classList.remove('show');
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+    btn.textContent = 'Scanning...';
+
+    const formData = new FormData();
+    formData.append('image1', state.file1);
+    formData.append('image2', state.file2);
+
+    try {
+      const res = await fetch('/verify', { method: 'POST', body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.detail || 'Verification failed.');
+      }
+
+      state.lastSimilarity = data.similarity;
+      state.modelThreshold = data.threshold;
+
+      const slider = document.getElementById('thresholdSlider');
+      slider.value = data.threshold;
+      document.getElementById('sliderValue').textContent = data.threshold.toFixed(3);
+
+      renderResult(data.similarity, data.threshold);
+      addToHistory(data.similarity, data.threshold);
+    } catch (err) {
+      errorBox.textContent = err.message;
+      errorBox.classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      updateButton();
+    }
+  });
+
+  // Live threshold slider — recomputes decision client-side against the last score
+  document.getElementById('thresholdSlider').addEventListener('input', e => {
+    const t = parseFloat(e.target.value);
+    document.getElementById('sliderValue').textContent = t.toFixed(3);
+    if (state.lastSimilarity !== null) {
+      renderResult(state.lastSimilarity, t);
+    }
+  });
+
+  function confidenceLabel(similarity, threshold) {
+    const margin = similarity - threshold;
+    const absMargin = Math.abs(margin);
+    let label;
+    if (absMargin > 0.25) label = margin > 0 ? 'strong match' : 'strong non-match';
+    else if (absMargin > 0.10) label = margin > 0 ? 'likely match' : 'likely non-match';
+    else label = 'borderline';
+    return label;
+  }
+
+  function renderResult(similarity, threshold) {
+    const same = similarity >= threshold;
+    const badge = document.getElementById('badge');
+    const confidenceTag = document.getElementById('confidenceTag');
+    const scoreText = document.getElementById('scoreText');
+    const barFill = document.getElementById('barFill');
+    const thresholdMark = document.getElementById('thresholdMark');
+    const thresholdText = document.getElementById('thresholdText');
+
+    badge.textContent = same ? 'SAME PERSON' : 'DIFFERENT PERSON';
+    badge.className = 'badge ' + (same ? 'same' : 'diff');
+    confidenceTag.textContent = confidenceLabel(similarity, threshold);
+    scoreText.textContent = similarity.toFixed(4);
+
+    const pct = Math.max(0, Math.min(1, similarity)) * 100;
+    barFill.className = 'bar-fill' + (same ? '' : ' diff');
+    thresholdMark.style.left = (threshold * 100) + '%';
+    thresholdText.textContent = 'threshold ' + threshold.toFixed(4);
+
+    document.getElementById('result').classList.add('show');
+    requestAnimationFrame(() => { barFill.style.width = pct + '%'; });
+  }
+
+  // ---- History (localStorage, this browser only) ----
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+    catch { return []; }
+  }
+
+  function saveHistory(items) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, MAX_HISTORY)));
+  }
+
+  async function fileToThumb(file, size = 80) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        const scale = Math.max(size / img.width, size / img.height);
+        const w = img.width * scale, h = img.height * scale;
+        ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  async function addToHistory(similarity, threshold) {
+    const [thumb1, thumb2] = await Promise.all([
+      fileToThumb(state.file1), fileToThumb(state.file2)
+    ]);
+    const entry = {
+      thumb1, thumb2, similarity, threshold,
+      same: similarity >= threshold,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    const items = loadHistory();
+    items.unshift(entry);
+    saveHistory(items);
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    const items = loadHistory();
+    if (items.length === 0) {
+      list.innerHTML = '<div class="history-empty">No comparisons yet this session.</div>';
+      return;
+    }
+    list.innerHTML = items.map((it, i) => `
+      <div class="history-item" onclick="restoreHistory(${i})">
+        <div class="history-thumbs">
+          <img src="${it.thumb1}">
+          <img src="${it.thumb2}">
+        </div>
+        <div class="history-info">
+          <div class="history-score">${it.similarity.toFixed(4)}</div>
+          <div class="history-time">${it.time}</div>
+        </div>
+        <span class="history-badge ${it.same ? 'same' : 'diff'}">${it.same ? 'SAME' : 'DIFF'}</span>
+      </div>
+    `).join('');
+  }
+
+  function restoreHistory(index) {
+    const items = loadHistory();
+    const it = items[index];
+    if (!it) return;
+    state.lastSimilarity = it.similarity;
+    const slider = document.getElementById('thresholdSlider');
+    slider.value = it.threshold;
+    document.getElementById('sliderValue').textContent = it.threshold.toFixed(3);
+    renderResult(it.similarity, it.threshold);
+  }
+
+  document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+    localStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+  });
+
+  renderHistory();
+</script>
+</body>
+</html>

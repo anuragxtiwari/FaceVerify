@@ -1,0 +1,20 @@
+# Core face recognition
+insightface==0.7.3
+onnxruntime>=1.20.0        # CPU inference. If you have an NVIDIA GPU + CUDA, use onnxruntime-gpu instead.
+
+# Image handling
+opencv-python-headless==4.10.0.84
+numpy>=2.0.0
+Pillow==10.4.0
+
+# Similarity / math
+scipy>=1.14.0
+scikit-learn>=1.5.1       # used later for ROC/EER (Step 6)
+
+# API layer (Step 8)
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9
+
+# Plotting (Step 6 - ROC curve)
+matplotlib==3.9.2

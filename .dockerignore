@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+.git
+.gitignore
+data/dataset/
+data/aligned_debug.jpg
+data/roc_curve.png
+models/
