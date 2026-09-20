@@ -1,25 +1,22 @@
 """
 Step 8: API Layer.
-
-Exposes the verification pipeline over HTTP:
-    POST /verify   (multipart form: image1, image2 file uploads)
-    -> { same_person, similarity, threshold }
-
-Run with:
-    uvicorn app.main:app --reload
 """
 
 import sys
 import os
+import json
 import tempfile
 
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # repo root on path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from main import FaceVerificationPipeline
 from src.detector import NoFaceDetectedError
+from src.config import INSIGHTFACE_MODEL_NAME, DATA_DIR
 
 app = FastAPI(
     title="Face Verification API",
@@ -27,28 +24,16 @@ app = FastAPI(
     version="1.0.0",
 )
 
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-
-# ... (keep everything else in the file as-is) ...
-
-# Add this right after `app = FastAPI(...)`:
 static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
-
-@app.get("/")
-async def serve_frontend():
-    return FileResponse(os.path.join(static_dir, "index.html"))
-
-# Loaded ONCE at server startup, reused across every request.
 pipeline: FaceVerificationPipeline = None
 
 
 @app.on_event("startup")
 def load_pipeline():
     global pipeline
-    print("Loading face verification pipeline (this may take a few seconds)...")
+    print("Loading face verification pipeline...")
     pipeline = FaceVerificationPipeline()
     print("Pipeline ready.")
 
@@ -57,6 +42,8 @@ class VerifyResponse(BaseModel):
     same_person: bool
     similarity: float
     threshold: float
+    aligned1: str
+    aligned2: str
 
 
 def _save_upload_to_temp(upload: UploadFile) -> str:
@@ -87,13 +74,29 @@ async def verify_endpoint(
         os.remove(path1)
         os.remove(path2)
 
-    return VerifyResponse(
-        same_person=result["same_person"],
-        similarity=result["similarity"],
-        threshold=result["threshold"],
-    )
+    return VerifyResponse(**result)
+
+
+@app.get("/model-info")
+async def model_info():
+    info = {"model_pack": INSIGHTFACE_MODEL_NAME}
+    threshold_path = os.path.join(DATA_DIR, "threshold.json")
+    if os.path.exists(threshold_path):
+        with open(threshold_path) as f:
+            data = json.load(f)
+        info.update({
+            "eer": data.get("eer"),
+            "auc": data.get("auc"),
+            "n_pairs": data.get("n_pairs"),
+        })
+    return info
 
 
 @app.get("/health")
 async def health():
     return {"status": "ok", "pipeline_loaded": pipeline is not None}
+
+
+@app.get("/")
+async def serve_frontend():
+    return FileResponse(os.path.join(static_dir, "index.html"))
