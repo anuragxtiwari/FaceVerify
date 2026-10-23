@@ -1,20 +1,17 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta
-  name="description"
-  content="FaceVerify compares two facial images and reports a similarity score.">
+  <meta name="description" content="FaceVerify compares two facial images and reports a similarity score.">
   <meta name="theme-color" content="#0B0E13">
+  <title>FaceVerify - Verify Identities</title>
 
-  <title>FaceVerify : Verify Identities</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --bg: #0B0E13;
@@ -47,7 +44,7 @@
       --danger-dim: #E11D4820;
     }
 
-      *{
+    * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -55,22 +52,11 @@
 
     html {
       color-scheme: dark;
+      transition: background-color 0.45s ease, color 0.45s ease;
     }
 
     html[data-theme="light"] {
       color-scheme: light;
-    }
-
-    /*
-
-GLOBAL THEME TRANSITION
-
-*/
-
-    html {
-      transition:
-        background-color 0.45s ease,
-        color 0.45s ease;
     }
 
     body {
@@ -84,31 +70,14 @@ GLOBAL THEME TRANSITION
       justify-content: center;
       padding: 32px 20px 64px;
       overflow-x: hidden;
-
-      transition:
-        background-color 0.45s ease,
-        color 0.45s ease;
-
+      transition: background-color 0.45s ease, color 0.45s ease;
     }
-
-    /*
-
-Theme-transition class gives us a controlled
-
-transition window when switching themes.
-*/
 
     html.theme-transitioning *,
     html.theme-transitioning *::before,
     html.theme-transitioning *::after {
       transition-duration: 0.45s !important;
     }
-
-    /*
-
-AMBIENT BACKGROUND
-
-*/
 
     .ambient {
       position: fixed;
@@ -117,6 +86,7 @@ AMBIENT BACKGROUND
       z-index: -1;
       pointer-events: none;
     }
+
     .cursor-glow {
       position: fixed;
       width: 400px;
@@ -124,39 +94,27 @@ AMBIENT BACKGROUND
       border-radius: 50%;
       pointer-events: none;
       z-index: -1;
-
       background: radial-gradient(
         circle,
         color-mix(in srgb, var(--accent) 22%, transparent) 0%,
         color-mix(in srgb, var(--accent2) 10%, transparent) 35%,
         transparent 70%
       );
-
       filter: blur(55px);
-
       transform: translate(-50%, -50%);
       left: 50%;
       top: 50%;
-
       opacity: 0;
-      transition:
-        opacity 0.4s ease,
-        background 0.5s ease;
-
+      transition: opacity 0.4s ease, background 0.5s ease;
       will-change: left, top;
     }
-
 
     .blob {
       position: absolute;
       border-radius: 50%;
       filter: blur(90px);
       opacity: 0.35;
-
-      transition:
-        background-color 0.7s ease,
-        opacity 0.7s ease;
-
+      transition: background-color 0.7s ease, opacity 0.7s ease;
     }
 
     .blob.a {
@@ -178,25 +136,13 @@ AMBIENT BACKGROUND
     }
 
     @keyframes drift1 {
-      from {
-        transform: translate(0, 0) scale(1);
-      }
-
-      to {
-        transform: translate(50px, 40px) scale(1.12);
-      }
-
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(50px, 40px) scale(1.12); }
     }
 
     @keyframes drift2 {
-      from {
-        transform: translate(0, 0) scale(1);
-      }
-
-      to {
-        transform: translate(-40px, -50px) scale(1.06);
-      }
-
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(-40px, -50px) scale(1.06); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -210,25 +156,12 @@ AMBIENT BACKGROUND
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
       }
-
     }
-
-    /*
-
-APP
-
-*/
 
     .app {
       width: 100%;
       max-width: 880px;
     }
-
-    /*
-
-HEADER
-
-*/
 
     header {
       display: flex;
@@ -249,25 +182,16 @@ HEADER
       padding: 6px 12px;
       border-radius: 20px;
       margin-bottom: 16px;
-
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        color 0.45s ease;
-
+      transition: background-color 0.45s ease, border-color 0.45s ease, color 0.45s ease;
     }
 
     .status-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent);
-
-      transition:
-        background-color 0.45s ease,
-        box-shadow 0.45s ease;
-
+      background: var(--text-dim);
+      box-shadow: 0 0 8px currentColor;
+      transition: background-color 0.45s ease, box-shadow 0.45s ease;
     }
 
     h1 {
@@ -275,25 +199,14 @@ HEADER
       font-weight: 600;
       letter-spacing: -0.01em;
       margin-bottom: 8px;
-
-      transition: color 0.45s ease;
-
     }
 
     header p {
       color: var(--text-dim);
       font-size: 15px;
       max-width: 46ch;
-
-      transition: color 0.45s ease;
-
+      line-height: 1.6;
     }
-
-    /*
-
-THEME TOGGLE
-
-*/
 
     .theme-toggle {
       width: 46px;
@@ -305,17 +218,14 @@ THEME TOGGLE
       position: relative;
       cursor: pointer;
       margin-top: 4px;
-
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        box-shadow 0.45s ease;
-
+      transition: background-color 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
     }
 
-    .theme-toggle:hover {
+    .theme-toggle:hover,
+    .theme-toggle:focus-visible {
       border-color: var(--border-active);
       box-shadow: 0 0 0 4px var(--accent-dim);
+      outline: none;
     }
 
     .theme-toggle .knob {
@@ -330,21 +240,13 @@ THEME TOGGLE
       align-items: center;
       justify-content: center;
       font-size: 11px;
-
-      transition:
-        transform 0.4s cubic-bezier(.34, 1.56, .64, 1),
-        background-color 0.45s ease,
-        box-shadow 0.45s ease;
-
+      transition: transform 0.4s cubic-bezier(.34, 1.56, .64, 1), background-color 0.45s ease;
     }
 
     .theme-toggle .knob::after {
       content: '☾';
       color: #06201C;
       font-size: 11px;
-      transition:
-        transform 0.35s ease,
-        opacity 0.25s ease;
     }
 
     [data-theme="light"] .theme-toggle .knob {
@@ -356,12 +258,6 @@ THEME TOGGLE
       transform: rotate(180deg);
     }
 
-    /*
-
-PANELS
-
-*/
-
     .panels {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -369,23 +265,6 @@ PANELS
       align-items: stretch;
       margin-bottom: 20px;
     }
-
-    @media (max-width: 640px) {
-      .panels {
-        grid-template-columns: 1fr;
-      }
-
-      .vs {
-        display: none;
-      }
-
-    }
-
-    /*
-
-DROPZONE
-
-*/
 
     .dropzone {
       background: var(--surface);
@@ -400,20 +279,18 @@ DROPZONE
       cursor: pointer;
       position: relative;
       overflow: hidden;
-
-      transition:
-        border-color 0.45s ease,
-        background-color 0.45s ease,
-        color 0.45s ease,
-        transform 0.2s ease,
-        box-shadow 0.45s ease;
-
+      transition: border-color 0.45s ease, background-color 0.45s ease, color 0.45s ease, transform 0.2s ease, box-shadow 0.45s ease;
     }
 
     .dropzone:hover {
       background: var(--surface-hover);
       border-color: var(--border-active);
       transform: translateY(-2px);
+    }
+
+    .dropzone:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
     }
 
     .dropzone.drag-over {
@@ -443,11 +320,6 @@ DROPZONE
       align-items: center;
       justify-content: center;
       color: var(--text-dim);
-
-      transition:
-        color 0.45s ease,
-        border-color 0.45s ease;
-
     }
 
     .dz-label {
@@ -455,18 +327,12 @@ DROPZONE
       font-size: 13px;
       text-align: center;
       padding: 0 20px;
-
-      transition: color 0.45s ease;
-
     }
 
     .dz-sub {
       color: var(--text-dim);
       font-size: 11px;
       opacity: 0.6;
-
-      transition: color 0.45s ease;
-
     }
 
     .dz-tag {
@@ -481,20 +347,14 @@ DROPZONE
       border-radius: 6px;
       border: 1px solid var(--border);
       z-index: 2;
-
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        color 0.45s ease;
-
     }
 
     .dz-clear {
       position: absolute;
       top: 12px;
       right: 12px;
-      width: 26px;
-      height: 26px;
+      width: 30px;
+      height: 30px;
       background: color-mix(in srgb, var(--bg) 75%, transparent);
       backdrop-filter: blur(4px);
       border: 1px solid var(--border);
@@ -505,13 +365,7 @@ DROPZONE
       justify-content: center;
       cursor: pointer;
       font-size: 14px;
-      z-index: 2;
-
-      transition:
-        background-color 0.25s ease,
-        border-color 0.25s ease,
-        color 0.25s ease;
-
+      z-index: 4;
     }
 
     .dz-clear:hover {
@@ -519,52 +373,29 @@ DROPZONE
       border-color: var(--danger);
     }
 
-    input[type=file] {
+    input[type="file"] {
       display: none;
     }
 
-    /*
-
-SCANNING
-
-*/
-
     .dropzone.scanning {
-      box-shadow:
-        0 0 0 2px var(--accent),
-        0 0 28px var(--accent-dim);
+      box-shadow: 0 0 0 2px var(--accent), 0 0 28px var(--accent-dim);
     }
 
     .dropzone.scanning::after {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(115deg,
-          transparent 42%,
-          color-mix(in srgb, var(--accent) 55%, transparent) 50%,
-          transparent 58%);
+      background: linear-gradient(115deg, transparent 42%, color-mix(in srgb, var(--accent) 55%, transparent) 50%, transparent 58%);
       background-size: 250% 250%;
       animation: sweep 1.3s linear infinite;
       z-index: 3;
+      pointer-events: none;
     }
 
     @keyframes sweep {
-      0% {
-        background-position: 160% 160%;
-      }
-
-      100% {
-        background-position: -60% -60%;
-      }
-
+      0% { background-position: 160% 160%; }
+      100% { background-position: -60% -60%; }
     }
-
-    /*
-
-SWAP
-
-*/
 
     .vs {
       display: flex;
@@ -585,13 +416,7 @@ SWAP
       justify-content: center;
       cursor: pointer;
       font-size: 14px;
-
-      transition:
-        transform 0.25s cubic-bezier(.34, 1.56, .64, 1),
-        color 0.45s ease,
-        border-color 0.45s ease,
-        background-color 0.45s ease;
-
+      transition: transform 0.25s cubic-bezier(.34, 1.56, .64, 1), color 0.45s ease, border-color 0.45s ease, background-color 0.45s ease;
     }
 
     .swap-btn:hover {
@@ -599,12 +424,6 @@ SWAP
       border-color: var(--accent);
       transform: rotate(180deg);
     }
-
-    /*
-
-ACTION
-
-*/
 
     .action-row {
       display: flex;
@@ -623,23 +442,12 @@ ACTION
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-
-      transition:
-        transform 0.12s ease,
-        opacity 0.15s ease,
-        box-shadow 0.2s ease,
-        background-color 0.45s ease,
-        color 0.45s ease;
-
+      transition: transform 0.12s ease, opacity 0.15s ease, box-shadow 0.2s ease, background-color 0.45s ease, color 0.45s ease;
     }
 
     .scan-btn:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px var(--accent-dim);
-    }
-
-    .scan-btn:active:not(:disabled) {
-      transform: translateY(0);
     }
 
     .scan-btn:disabled {
@@ -659,9 +467,7 @@ ACTION
       color: var(--text-dim);
       font-size: 12px;
       margin-bottom: 24px;
-
-      transition: color 0.45s ease;
-
+      line-height: 1.6;
     }
 
     .hint kbd {
@@ -671,19 +477,7 @@ ACTION
       border-radius: 4px;
       padding: 1px 6px;
       font-size: 11px;
-
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        color 0.45s ease;
-
     }
-
-    /*
-
-RESULT
-
-*/
 
     .result {
       background: var(--surface);
@@ -692,13 +486,7 @@ RESULT
       padding: 28px;
       display: none;
       margin-bottom: 24px;
-
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        color 0.45s ease,
-        box-shadow 0.45s ease;
-
+      transition: background-color 0.45s ease, border-color 0.45s ease, color 0.45s ease, box-shadow 0.45s ease;
     }
 
     .result.show {
@@ -707,16 +495,8 @@ RESULT
     }
 
     @keyframes reveal {
-      from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .result-top {
@@ -732,6 +512,7 @@ RESULT
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .badge {
@@ -739,12 +520,6 @@ RESULT
       font-weight: 600;
       padding: 7px 14px;
       border-radius: 20px;
-
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        color 0.45s ease;
-
     }
 
     .badge.same {
@@ -760,20 +535,9 @@ RESULT
     }
 
     @keyframes badgePop {
-      0% {
-        transform: scale(0.75);
-        opacity: 0;
-      }
-
-      65% {
-        transform: scale(1.08);
-        opacity: 1;
-      }
-
-      100% {
-        transform: scale(1);
-      }
-
+      0% { transform: scale(0.75); opacity: 0; }
+      65% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); }
     }
 
     .badge.reveal {
@@ -786,35 +550,18 @@ RESULT
       padding: 6px 10px;
       border-radius: 20px;
       border: 1px solid var(--border);
-
-      transition:
-        color 0.45s ease,
-        border-color 0.45s ease;
-
     }
 
     .score-readout {
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
       color: var(--text-dim);
-
-      transition: color 0.45s ease;
-
     }
 
     .score-readout b {
       color: var(--text);
       font-size: 16px;
-
-      transition: color 0.45s ease;
-
     }
-
-    /*
-
-SCORE BAR
-
-*/
 
     .bar-track {
       position: relative;
@@ -822,27 +569,19 @@ SCORE BAR
       background: var(--border);
       border-radius: 4px;
       margin: 22px 0 10px;
-
-      transition: background-color 0.45s ease;
-
+      overflow: visible;
     }
 
     .bar-fill {
       height: 100%;
       border-radius: 4px;
-      background: linear-gradient(90deg,
-          var(--accent),
-          var(--accent2));
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
       width: 0%;
-      transition:
-        width 0.7s cubic-bezier(.16, 1, .3, 1),
-        background 0.45s ease;
+      transition: width 0.7s cubic-bezier(.16, 1, .3, 1), background 0.45s ease;
     }
 
     .bar-fill.diff {
-      background: linear-gradient(90deg,
-          var(--danger),
-          #FB923C);
+      background: linear-gradient(90deg, var(--danger), #FB923C);
     }
 
     .threshold-mark {
@@ -851,30 +590,18 @@ SCORE BAR
       width: 2px;
       height: 16px;
       background: var(--text-dim);
-
-      transition:
-        left 0.15s ease,
-        background-color 0.45s ease;
-
+      transition: left 0.15s ease, background-color 0.45s ease;
     }
 
     .threshold-label {
       display: flex;
       justify-content: space-between;
+      gap: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       color: var(--text-dim);
       margin-bottom: 22px;
-
-      transition: color 0.45s ease;
-
     }
-
-    /*
-
-ALIGNED PREVIEW
-
-*/
 
     .aligned-preview {
       display: flex;
@@ -883,15 +610,11 @@ ALIGNED PREVIEW
       padding-top: 20px;
       margin-bottom: 20px;
       border-top: 1px solid var(--border);
-
-      transition:
-        border-color 0.45s ease,
-        color 0.45s ease;
-
     }
 
     .aligned-preview-item {
       text-align: center;
+      flex-shrink: 0;
     }
 
     .aligned-preview img {
@@ -900,10 +623,6 @@ ALIGNED PREVIEW
       border-radius: 8px;
       object-fit: cover;
       border: 1px solid var(--border-active);
-
-      transition:
-        border-color 0.45s ease;
-
     }
 
     .aligned-preview-label {
@@ -911,25 +630,14 @@ ALIGNED PREVIEW
       font-size: 10px;
       color: var(--text-dim);
       margin-top: 6px;
-
-      transition: color 0.45s ease;
-
     }
 
     .aligned-preview-caption {
       font-size: 12px;
       color: var(--text-dim);
       margin-left: 6px;
-
-      transition: color 0.45s ease;
-
+      line-height: 1.5;
     }
-
-    /*
-
-SLIDER
-
-*/
 
     .slider-row {
       border-top: 1px solid var(--border);
@@ -937,9 +645,6 @@ SLIDER
       display: flex;
       align-items: center;
       gap: 16px;
-
-      transition: border-color 0.45s ease;
-
     }
 
     .slider-label {
@@ -947,25 +652,20 @@ SLIDER
       color: var(--text-dim);
       white-space: nowrap;
       width: 130px;
-
-      transition: color 0.45s ease;
-
     }
 
-    input[type=range] {
+    input[type="range"] {
       flex: 1;
+      min-width: 0;
       -webkit-appearance: none;
+      appearance: none;
       height: 4px;
       background: var(--border);
       border-radius: 2px;
       outline: none;
-
-      transition:
-        background-color 0.45s ease;
-
     }
 
-    input[type=range]::-webkit-slider-thumb {
+    input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 16px;
       height: 16px;
@@ -974,15 +674,9 @@ SLIDER
       border: 2px solid var(--bg);
       box-shadow: 0 0 0 1px var(--accent);
       cursor: pointer;
-
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        box-shadow 0.45s ease;
-
     }
 
-    input[type=range]::-moz-range-thumb {
+    input[type="range"]::-moz-range-thumb {
       width: 16px;
       height: 16px;
       border-radius: 50%;
@@ -990,12 +684,6 @@ SLIDER
       border: 2px solid var(--bg);
       box-shadow: 0 0 0 1px var(--accent);
       cursor: pointer;
-
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        box-shadow 0.45s ease;
-
     }
 
     .slider-value {
@@ -1004,16 +692,14 @@ SLIDER
       color: var(--accent);
       width: 56px;
       text-align: right;
-
-      transition: color 0.45s ease;
-
     }
 
-    /*
-
-ERROR
-
-*/
+    .slider-note {
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--text-dim);
+      margin-top: 10px;
+    }
 
     .error-box {
       background: var(--danger-dim);
@@ -1025,12 +711,7 @@ ERROR
       display: none;
       margin-bottom: 24px;
       position: relative;
-
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        color 0.45s ease;
-
+      line-height: 1.5;
     }
 
     .error-box.show {
@@ -1047,27 +728,15 @@ ERROR
       color: var(--text-dim);
       cursor: pointer;
       font-size: 14px;
-
-      transition: color 0.25s ease;
-
     }
 
     .error-close:hover {
       color: var(--text);
     }
 
-    /*
-
-HISTORY
-
-*/
-
     .history {
       border-top: 1px solid var(--border);
       padding-top: 20px;
-
-      transition: border-color 0.45s ease;
-
     }
 
     .history-head {
@@ -1081,9 +750,6 @@ HISTORY
       font-size: 13px;
       font-weight: 500;
       color: var(--text-dim);
-
-      transition: color 0.45s ease;
-
     }
 
     .clear-history {
@@ -1094,12 +760,6 @@ HISTORY
       border-radius: 6px;
       padding: 5px 10px;
       cursor: pointer;
-
-      transition:
-        color 0.25s ease,
-        border-color 0.25s ease,
-        background-color 0.45s ease;
-
     }
 
     .clear-history:hover {
@@ -1117,9 +777,6 @@ HISTORY
       color: var(--text-dim);
       font-size: 13px;
       padding: 12px 0;
-
-      transition: color 0.45s ease;
-
     }
 
     .history-item {
@@ -1131,22 +788,19 @@ HISTORY
       border-radius: 8px;
       padding: 8px;
       cursor: pointer;
-
-      transition:
-        border-color 0.15s ease,
-        background-color 0.45s ease,
-        color 0.45s ease,
-        transform 0.15s ease;
-
+      transition: border-color 0.15s ease, background-color 0.45s ease, color 0.45s ease, transform 0.15s ease;
     }
 
-    .history-item:hover {
+    .history-item:hover,
+    .history-item:focus-visible {
       border-color: var(--border-active);
       transform: translateX(3px);
+      outline: none;
     }
 
     .history-thumbs {
       display: flex;
+      flex-shrink: 0;
     }
 
     .history-thumbs img {
@@ -1155,10 +809,6 @@ HISTORY
       object-fit: cover;
       border-radius: 6px;
       border: 2px solid var(--bg);
-
-      transition:
-        border-color 0.45s ease;
-
     }
 
     .history-thumbs img:last-child {
@@ -1167,22 +817,17 @@ HISTORY
 
     .history-info {
       flex: 1;
+      min-width: 0;
     }
 
     .history-score {
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
-
-      transition: color 0.45s ease;
-
     }
 
     .history-time {
       font-size: 11px;
       color: var(--text-dim);
-
-      transition: color 0.45s ease;
-
     }
 
     .history-badge {
@@ -1190,11 +835,7 @@ HISTORY
       padding: 4px 8px;
       border-radius: 12px;
       font-weight: 600;
-
-      transition:
-        background-color 0.45s ease,
-        color 0.45s ease;
-
+      flex-shrink: 0;
     }
 
     .history-badge.same {
@@ -1206,12 +847,6 @@ HISTORY
       background: var(--danger-dim);
       color: var(--danger);
     }
-
-    /*
-
-STATS
-
-*/
 
     .stat-strip {
       margin-top: 32px;
@@ -1229,91 +864,151 @@ STATS
       border: 1px solid var(--border);
       padding: 6px 12px;
       border-radius: 20px;
+    }
 
-      transition:
-        background-color 0.45s ease,
-        border-color 0.45s ease,
-        color 0.45s ease;
+    @media (max-width: 640px) {
+      body {
+        padding: 24px 14px 44px;
+      }
 
+      header {
+        margin-bottom: 28px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .panels {
+        grid-template-columns: 1fr;
+      }
+
+      .vs {
+        display: none;
+      }
+
+      .dropzone {
+        min-height: 240px;
+      }
+
+      .dropzone img {
+        min-height: 240px;
+        max-height: 360px;
+      }
+
+      .result {
+        padding: 20px;
+      }
+
+      .aligned-preview {
+        flex-wrap: wrap;
+      }
+
+      .aligned-preview-caption {
+        flex-basis: 100%;
+        margin-left: 0;
+      }
+
+      .slider-row {
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .slider-label {
+        width: auto;
+      }
+
+      .slider-row input[type="range"] {
+        flex-basis: 100%;
+        order: 3;
+      }
+
+      .slider-value {
+        margin-left: auto;
+      }
+
+      .threshold-label {
+        font-size: 10px;
+      }
     }
   </style>
-
 </head>
 
 <body>
-  <div class="ambient">
+  <div class="ambient" aria-hidden="true">
     <div class="blob a"></div>
     <div class="blob b"></div>
-
     <div class="cursor-glow" id="cursorGlow"></div>
   </div>
-  <div class="app">
+
+  <main class="app">
     <header>
       <div>
-        <div class="status-pill"> <span class="status-dot" id="statusDot"></span> <span id="statusText">Loading
-            model…</span> </div>
+        <div class="status-pill" role="status" aria-live="polite">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusText">Checking model...</span>
+        </div>
+
         <h1>FaceVerify</h1>
 
         <p>
           Upload two photos. The system detects, aligns, and compares each face,
-          then reports a similarity score against the trained decision threshold.
+          then reports a similarity score against the calibrated decision threshold.
         </p>
       </div>
 
-      <div class="theme-toggle" id="themeToggle" title="Toggle theme" role="button" tabindex="0"
-        aria-label="Toggle theme">
+      <div
+        class="theme-toggle"
+        id="themeToggle"
+        title="Toggle theme"
+        role="button"
+        tabindex="0"
+        aria-label="Toggle theme"
+        aria-pressed="false"
+      >
         <div class="knob" id="themeKnob"></div>
       </div>
-
     </header>
-    <div class="panels">
-      <div class="dropzone" id="dz1" tabindex="0">
+
+    <section class="panels" aria-label="Face image uploads">
+      <div class="dropzone" id="dz1" tabindex="0" role="button" aria-label="Upload image A">
         <span class="dz-tag">IMAGE A</span>
-
-        <div class="dz-icon">⇪</div>
-
-        <div class="dz-label">
-          Click or drop a photo
-        </div>
-
-        <div class="dz-sub">
-          or paste with Ctrl+V
-        </div>
-
-        <input type="file" id="file1" accept="image/*">
+        <div class="dz-icon" aria-hidden="true">⇪</div>
+        <div class="dz-label">Click or drop a photo</div>
+        <div class="dz-sub">or paste with Ctrl+V</div>
+        <input type="file" id="file1" accept="image/*" aria-label="Select image A">
       </div>
 
       <div class="vs">
-        <button class="swap-btn" id="swapBtn" title="Swap images">
-          ⇄
-        </button>
+        <button class="swap-btn" id="swapBtn" type="button" title="Swap images" aria-label="Swap images">⇄</button>
       </div>
 
-      <div class="dropzone" id="dz2" tabindex="0">
+      <div class="dropzone" id="dz2" tabindex="0" role="button" aria-label="Upload image B">
         <span class="dz-tag">IMAGE B</span>
-
-        <div class="dz-icon">⇪</div>
-
-        <div class="dz-label">
-          Click or drop a photo
-        </div>
-
-        <div class="dz-sub">
-          or paste with Ctrl+V
-        </div>
-
-        <input type="file" id="file2" accept="image/*">
+        <div class="dz-icon" aria-hidden="true">⇪</div>
+        <div class="dz-label">Click or drop a photo</div>
+        <div class="dz-sub">or paste with Ctrl+V</div>
+        <input type="file" id="file2" accept="image/*" aria-label="Select image B">
       </div>
+    </section>
 
+    <div class="action-row">
+      <button class="scan-btn" id="scanBtn" type="button" disabled>
+        Upload both images to compare
+      </button>
     </div>
-    <div class="action-row"> <button class="scan-btn" id="scanBtn" disabled> Upload both images to compare </button>
+
+    <div class="hint">
+      Press <kbd>Enter</kbd> to compare once both images are loaded
     </div>
-    <div class="hint"> Press <kbd>Enter</kbd> to compare once both images are loaded </div>
-    <div class="error-box" id="errorBox"> <span id="errorText"></span> <button class="error-close"
-        id="errorClose">✕</button> </div>
-    <div class="result" id="result">
+
+    <div class="error-box" id="errorBox" role="alert" aria-live="assertive">
+      <span id="errorText"></span>
+      <button class="error-close" id="errorClose" type="button" aria-label="Dismiss error">✕</button>
+    </div>
+
+    <section class="result" id="result" aria-live="polite" aria-label="Verification result">
       <div class="result-top">
-
         <div class="badge-group">
           <span class="badge" id="badge">—</span>
           <span class="confidence-tag" id="confidenceTag">—</span>
@@ -1322,10 +1017,13 @@ STATS
         <span class="score-readout">
           similarity <b id="scoreText">0.0000</b>
         </span>
-
       </div>
 
-      <div class="bar-track">
+      <div
+        class="bar-track"
+        role="img"
+        aria-label="Similarity score and threshold comparison"
+      >
         <div class="bar-fill" id="barFill"></div>
         <div class="threshold-mark" id="thresholdMark"></div>
       </div>
@@ -1337,7 +1035,6 @@ STATS
       </div>
 
       <div class="aligned-preview" id="alignedPreview" style="display:none;">
-
         <div class="aligned-preview-item">
           <img id="alignedImg1" src="" alt="Aligned face A">
           <div class="aligned-preview-label">A</div>
@@ -1349,48 +1046,54 @@ STATS
         </div>
 
         <span class="aligned-preview-caption">
-          Detected &amp; aligned — this is what the model actually compared
+          Detected and aligned faces — these are the images the model compared.
         </span>
-
       </div>
 
       <div class="slider-row">
-
-        <span class="slider-label">
-          Decision threshold
-        </span>
-
-        <input type="range" id="thresholdSlider" min="0" max="1" step="0.001" value="0.35">
-
-        <span class="slider-value" id="sliderValue">
-          0.350
-        </span>
-
+        <label class="slider-label" for="thresholdSlider">Decision threshold</label>
+        <input
+          type="range"
+          id="thresholdSlider"
+          min="0"
+          max="1"
+          step="0.001"
+          value="0.35"
+          aria-label="Adjust the decision threshold for the displayed result"
+        >
+        <span class="slider-value" id="sliderValue">0.350</span>
       </div>
 
-    </div>
-    <div class="history">
+      <p class="slider-note">
+        What-if control: changing this slider updates the displayed decision only.
+        It does not rerun the model or change the saved calibration threshold.
+      </p>
+    </section>
+
+    <section class="history" aria-label="Recent comparisons">
       <div class="history-head">
         <h2>Recent comparisons</h2>
-
-        <button class="clear-history" id="clearHistoryBtn">
-          Clear
-        </button>
+        <button class="clear-history" id="clearHistoryBtn" type="button">Clear</button>
       </div>
 
       <div class="history-list" id="historyList">
-        <div class="history-empty">
-          No comparisons yet this session.
-        </div>
+        <div class="history-empty">No comparisons yet.</div>
       </div>
+    </section>
 
-    </div>
-    <div class="stat-strip" id="statStrip"></div>
-  </div>
+    <div class="stat-strip" id="statStrip" aria-label="Model information"></div>
+  </main>
+
   <script>
+    'use strict';
+
     const state = {
       file1: null,
       file2: null,
+      previewUrls: {
+        file1: null,
+        file2: null
+      },
       lastSimilarity: null,
       modelThreshold: null
     };
@@ -1398,602 +1101,385 @@ STATS
     const HISTORY_KEY = 'faceverify_history';
     const THEME_KEY = 'faceverify_theme';
     const MAX_HISTORY = 5;
+    const NEAR_THRESHOLD_MARGIN = 0.03;
 
-    /*
-    
-    =========================================================
-    
-    THEME
-    
-    =========================================================
-    */
+    /* STORAGE */
+
+    function safeStorageGet(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    }
+
+    function safeStorageSet(key, value) {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function safeStorageRemove(key) {
+      try {
+        localStorage.removeItem(key);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    /* THEME */
 
     function applyTheme(theme, animate = true) {
+      const validTheme = theme === 'light' ? 'light' : 'dark';
 
       if (animate) {
         document.documentElement.classList.add('theme-transitioning');
-
         clearTimeout(window.themeTransitionTimer);
 
         window.themeTransitionTimer = setTimeout(() => {
-          document.documentElement.classList.remove(
-            'theme-transitioning'
-          );
+          document.documentElement.classList.remove('theme-transitioning');
         }, 500);
       }
 
-      document.documentElement.setAttribute(
-        'data-theme',
-        theme
-      );
+      document.documentElement.setAttribute('data-theme', validTheme);
 
+      const toggle = document.getElementById('themeToggle');
+      toggle.setAttribute('aria-pressed', String(validTheme === 'light'));
     }
 
     (function initTheme() {
+      const saved = safeStorageGet(THEME_KEY);
+      const preferred = saved ||
+        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 
-      const saved = localStorage.getItem(THEME_KEY);
-
-      const preferred =
-        saved ||
-        (
-          window.matchMedia(
-            '(prefers-color-scheme: light)'
-          ).matches
-            ? 'light'
-            : 'dark'
-        );
-
-      /*
-       * Initial load par animation nahi chalayenge.
-       */
       applyTheme(preferred, false);
-
     })();
 
     function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
 
-      const current =
-        document.documentElement.getAttribute(
-          'data-theme'
-        );
-
-      const next =
-        current === 'light'
-          ? 'dark'
-          : 'light';
-
-      applyTheme(next, true);
-
-      localStorage.setItem(
-        THEME_KEY,
-        next
-      );
-
+      applyTheme(next);
+      safeStorageSet(THEME_KEY, next);
     }
 
-    document
-      .getElementById('themeToggle')
-      .addEventListener(
-        'click',
-        toggleTheme
-      );
+    const themeToggle = document.getElementById('themeToggle');
 
-    document
-      .getElementById('themeToggle')
-      .addEventListener(
-        'keydown',
-        e => {
+    themeToggle.addEventListener('click', toggleTheme);
 
-          if (
-            e.key === 'Enter' ||
-            e.key === ' '
-          ) {
-            e.preventDefault();
-            toggleTheme();
-          }
-
-        }
-      );
-
-    /*
-    
-    =========================================================
-    
-    DROPZONE
-    
-    =========================================================
-    */
-
-    function setupDropzone(
-      dzId,
-      inputId,
-      key
-    ) {
-
-      const dz =
-        document.getElementById(dzId);
-
-      const input =
-        document.getElementById(inputId);
-
-      dz.addEventListener(
-        'click',
-        () => {
-
-          if (!state[key]) {
-            input.click();
-          }
-
-        }
-      );
-
-      dz.addEventListener(
-        'keydown',
-        e => {
-
-          if (
-            e.key === 'Enter' &&
-            !state[key]
-          ) {
-            input.click();
-          }
-
-        }
-      );
-
-      input.addEventListener(
-        'change',
-        e => {
-
-          if (e.target.files[0]) {
-            loadFile(
-              e.target.files[0],
-              dz,
-              key
-            );
-          }
-
-        }
-      );
-
-      dz.addEventListener(
-        'dragover',
-        e => {
-
-          e.preventDefault();
-
-          dz.classList.add(
-            'drag-over'
-          );
-
-        }
-      );
-
-      dz.addEventListener(
-        'dragleave',
-        () => {
-
-          dz.classList.remove(
-            'drag-over'
-          );
-
-        }
-      );
-
-      dz.addEventListener(
-        'drop',
-        e => {
-
-          e.preventDefault();
-
-          dz.classList.remove(
-            'drag-over'
-          );
-
-          if (
-            e.dataTransfer.files[0]
-          ) {
-
-            loadFile(
-              e.dataTransfer.files[0],
-              dz,
-              key
-            );
-
-          }
-
-        }
-      );
-
-    }
-
-    function loadFile(
-      file,
-      dz,
-      key
-    ) {
-
-      state[key] = file;
-
-      const url =
-        URL.createObjectURL(file);
-
-      const label =
-        dz.id === 'dz1'
-          ? 'IMAGE A'
-          : 'IMAGE B';
-
-      dz.classList.add('filled');
-
-      dz.innerHTML = `
-  <span class="dz-tag">${label}</span>
-
-  <span
-    class="dz-clear"
-    onclick="clearZone(
-      event,
-      '${dz.id}',
-      '${key}'
-    )"
-  >
-    ✕
-  </span>
-
-  <img
-    src="${url}"
-    alt="${label}"
-  >
-`;
-
-      updateButton();
-
-    }
-
-    function clearZone(
-      e,
-      dzId,
-      key
-    ) {
-
-      e.stopPropagation();
-
-      state[key] = null;
-
-      const dz =
-        document.getElementById(dzId);
-
-      const label =
-        dzId === 'dz1'
-          ? 'IMAGE A'
-          : 'IMAGE B';
-
-      dz.classList.remove(
-        'filled',
-        'scanning'
-      );
-
-      dz.innerHTML = `
-  <span class="dz-tag">${label}</span>
-
-  <div class="dz-icon">⇪</div>
-
-  <div class="dz-label">
-    Click or drop a photo
-  </div>
-
-  <div class="dz-sub">
-    or paste with Ctrl+V
-  </div>
-
-  <input
-    type="file"
-    id="${key}"
-    accept="image/*"
-  >
-`;
-
-      document
-        .getElementById(key)
-        .addEventListener(
-          'change',
-          ev => {
-
-            if (
-              ev.target.files[0]
-            ) {
-
-              loadFile(
-                ev.target.files[0],
-                dz,
-                key
-              );
-
-            }
-
-          }
-        );
-
-      updateButton();
-
-    }
-
-    function updateButton() {
-
-      const btn =
-        document.getElementById(
-          'scanBtn'
-        );
-
-      const ready =
-        state.file1 &&
-        state.file2;
-
-      btn.disabled = !ready;
-
-      btn.textContent =
-        ready
-          ? 'Compare faces'
-          : 'Upload both images to compare';
-
-    }
-
-    setupDropzone(
-      'dz1',
-      'file1',
-      'file1'
-    );
-
-    setupDropzone(
-      'dz2',
-      'file2',
-      'file2'
-    );
-
-    /*
-    
-    =========================================================
-    
-    SWAP
-    
-    =========================================================
-    */
-
-    document
-      .getElementById('swapBtn')
-      .addEventListener(
-        'click',
-        () => {
-
-          if (
-            !state.file1 &&
-            !state.file2
-          ) {
-            return;
-          }
-
-          const f1 = state.file1;
-          const f2 = state.file2;
-
-          clearZone(
-            {
-              stopPropagation() { }
-            },
-            'dz1',
-            'file1'
-          );
-
-          clearZone(
-            {
-              stopPropagation() { }
-            },
-            'dz2',
-            'file2'
-          );
-
-          if (f2) {
-
-            loadFile(
-              f2,
-              document.getElementById('dz1'),
-              'file1'
-            );
-
-          }
-
-          if (f1) {
-
-            loadFile(
-              f1,
-              document.getElementById('dz2'),
-              'file2'
-            );
-
-          }
-
-        }
-      );
-
-    /*
-    
-    =========================================================
-    
-    PASTE
-    
-    =========================================================
-    */
-
-    document.addEventListener(
-      'paste',
-      e => {
-
-        const items =
-          e.clipboardData.items;
-
-        for (const item of items) {
-
-          if (
-            item.type.startsWith('image/')
-          ) {
-
-            const file =
-              item.getAsFile();
-
-            if (!state.file1) {
-
-              loadFile(
-                file,
-                document.getElementById('dz1'),
-                'file1'
-              );
-
-            } else if (!state.file2) {
-
-              loadFile(
-                file,
-                document.getElementById('dz2'),
-                'file2'
-              );
-
-            }
-
-            break;
-          }
-
-        }
-
+    themeToggle.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleTheme();
       }
+    });
 
-    );
-
-    /*
-    
-    =========================================================
-    
-    ENTER KEY
-    
-    =========================================================
-    */
-
-    document.addEventListener(
-      'keydown',
-      e => {
-
-        if (
-          e.key === 'Enter' &&
-          state.file1 &&
-          state.file2
-        ) {
-
-          const btn =
-            document.getElementById(
-              'scanBtn'
-            );
-
-          if (!btn.disabled) {
-            btn.click();
-          }
-
-        }
-
-      }
-
-    );
-
-    /*
-    
-    =========================================================
-    
-    ERROR
-    
-    =========================================================
-    */
+    /* ERROR HANDLING */
 
     let errorTimeout = null;
 
     function showError(message) {
+      const errorBox = document.getElementById('errorBox');
 
-      const errorBox =
-        document.getElementById(
-          'errorBox'
-        );
-
-      document.getElementById(
-        'errorText'
-      ).textContent = message;
+      document.getElementById('errorText').textContent =
+        String(message || 'An unexpected error occurred.');
 
       errorBox.classList.add('show');
 
-      clearTimeout(
-        errorTimeout
-      );
+      clearTimeout(errorTimeout);
 
-      errorTimeout = setTimeout(
-        () => {
-          errorBox.classList.remove(
-            'show'
-          );
-        },
-        6000
-      );
-
+      errorTimeout = setTimeout(() => {
+        errorBox.classList.remove('show');
+      }, 6000);
     }
 
-    document
-      .getElementById('errorClose')
-      .addEventListener(
-        'click',
-        () => {
+    document.getElementById('errorClose').addEventListener('click', () => {
+      document.getElementById('errorBox').classList.remove('show');
+      clearTimeout(errorTimeout);
+    });
 
-          document
-            .getElementById('errorBox')
-            .classList.remove('show');
+    /* DROPZONES */
 
-          clearTimeout(
-            errorTimeout
-          );
+    function revokePreviewUrl(key) {
+      const url = state.previewUrls[key];
 
+      if (url) {
+        URL.revokeObjectURL(url);
+        state.previewUrls[key] = null;
+      }
+    }
+
+    function setupDropzone(dzId, key) {
+      const dz = document.getElementById(dzId);
+      const input = dz.querySelector('input[type="file"]');
+
+      dz.addEventListener('click', event => {
+        if (!state[key] && !event.target.closest('.dz-clear')) {
+          input.click();
         }
-      );
+      });
 
+      dz.addEventListener('keydown', event => {
+        if (
+          (event.key === 'Enter' || event.key === ' ') &&
+          !state[key]
+        ) {
+          event.preventDefault();
+          input.click();
+        }
+      });
 
-    const cursorGlow =
-      document.getElementById('cursorGlow');
+      input.addEventListener('change', event => {
+        const file = event.target.files && event.target.files[0];
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
+        if (file) {
+          loadFile(file, dz, key);
+        }
+      });
 
-    let glowX = mouseX;
-    let glowY = mouseY;
+      dz.addEventListener('dragover', event => {
+        event.preventDefault();
+        dz.classList.add('drag-over');
+      });
 
-    let glowVisible = false;
+      dz.addEventListener('dragleave', event => {
+        if (!dz.contains(event.relatedTarget)) {
+          dz.classList.remove('drag-over');
+        }
+      });
 
-    window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      dz.addEventListener('drop', event => {
+        event.preventDefault();
+        dz.classList.remove('drag-over');
 
-      if (!glowVisible) {
-        glowVisible = true;
-        cursorGlow.style.opacity = '1';
+        const file = event.dataTransfer &&
+          event.dataTransfer.files &&
+          event.dataTransfer.files[0];
+
+        if (file) {
+          loadFile(file, dz, key);
+        }
+      });
+    }
+
+    function loadFile(file, dz, key) {
+      if (!file || !file.type || !file.type.startsWith('image/')) {
+        showError('Please select a valid image file.');
+        return;
+      }
+
+      const input = dz.querySelector('input[type="file"]');
+
+      if (!input) {
+        showError('Upload control missing. Please refresh the page.');
+        return;
+      }
+
+      revokePreviewUrl(key);
+
+      state[key] = file;
+
+      const url = URL.createObjectURL(file);
+      state.previewUrls[key] = url;
+
+      const label = key === 'file1' ? 'IMAGE A' : 'IMAGE B';
+
+      /*
+       * Keep the original file input node.
+       * Reusing it preserves its change listener after clearing an image.
+       */
+      input.remove();
+      dz.replaceChildren();
+
+      const tag = document.createElement('span');
+      tag.className = 'dz-tag';
+      tag.textContent = label;
+
+      const clearButton = document.createElement('button');
+      clearButton.type = 'button';
+      clearButton.className = 'dz-clear';
+      clearButton.textContent = '✕';
+      clearButton.setAttribute('aria-label', `Clear ${label}`);
+
+      clearButton.addEventListener('click', event => {
+        event.stopPropagation();
+        clearZone(dz.id, key);
+      });
+
+      const image = document.createElement('img');
+      image.src = url;
+      image.alt = label;
+
+      dz.append(tag, clearButton, image, input);
+      dz.classList.add('filled');
+
+      updateButton();
+    }
+
+    function clearZone(dzId, key) {
+      const dz = document.getElementById(dzId);
+      const input = dz.querySelector('input[type="file"]');
+
+      if (!input) {
+        showError('Upload control missing. Please refresh the page.');
+        return;
+      }
+
+      revokePreviewUrl(key);
+      state[key] = null;
+
+      dz.classList.remove('filled', 'scanning', 'drag-over');
+
+      /*
+       * Resetting the input permits the same file to be selected again.
+       */
+      input.value = '';
+      input.remove();
+
+      const label = key === 'file1' ? 'IMAGE A' : 'IMAGE B';
+
+      const tag = document.createElement('span');
+      tag.className = 'dz-tag';
+      tag.textContent = label;
+
+      const icon = document.createElement('div');
+      icon.className = 'dz-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.textContent = '⇪';
+
+      const description = document.createElement('div');
+      description.className = 'dz-label';
+      description.textContent = 'Click or drop a photo';
+
+      const subtext = document.createElement('div');
+      subtext.className = 'dz-sub';
+      subtext.textContent = 'or paste with Ctrl+V';
+
+      dz.replaceChildren(tag, icon, description, subtext, input);
+
+      updateButton();
+    }
+
+    function updateButton() {
+      const btn = document.getElementById('scanBtn');
+      const ready = Boolean(state.file1 && state.file2);
+
+      if (!btn.classList.contains('loading')) {
+        btn.disabled = !ready;
+        btn.textContent = ready
+          ? 'Compare faces'
+          : 'Upload both images to compare';
+      }
+    }
+
+    setupDropzone('dz1', 'file1');
+    setupDropzone('dz2', 'file2');
+
+    /* SWAP */
+
+    document.getElementById('swapBtn').addEventListener('click', () => {
+      if (!state.file1 && !state.file2) {
+        return;
+      }
+
+      const firstFile = state.file1;
+      const secondFile = state.file2;
+
+      clearZone('dz1', 'file1');
+      clearZone('dz2', 'file2');
+
+      if (secondFile) {
+        loadFile(secondFile, document.getElementById('dz1'), 'file1');
+      }
+
+      if (firstFile) {
+        loadFile(firstFile, document.getElementById('dz2'), 'file2');
       }
     });
 
+    /* PASTE */
+
+    document.addEventListener('paste', event => {
+      const items = event.clipboardData && event.clipboardData.items;
+
+      if (!items) {
+        return;
+      }
+
+      for (const item of items) {
+        if (item.type.startsWith('image/')) {
+          const file = item.getAsFile();
+
+          if (!file) {
+            continue;
+          }
+
+          if (!state.file1) {
+            loadFile(file, document.getElementById('dz1'), 'file1');
+          } else if (!state.file2) {
+            loadFile(file, document.getElementById('dz2'), 'file2');
+          } else {
+            showError('Both image slots are full. Clear a slot before pasting another image.');
+          }
+
+          break;
+        }
+      }
+    });
+
+    /* ENTER KEY */
+
+    document.addEventListener('keydown', event => {
+      const target = event.target;
+      const interactiveTags = ['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT'];
+
+      if (
+        event.key === 'Enter' &&
+        !event.repeat &&
+        state.file1 &&
+        state.file2 &&
+        !document.getElementById('scanBtn').disabled &&
+        !interactiveTags.includes(target.tagName) &&
+        target.id !== 'themeToggle'
+      ) {
+        document.getElementById('scanBtn').click();
+      }
+    });
+
+    /* CURSOR GLOW */
+
+    const cursorGlow = document.getElementById('cursorGlow');
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let glowX = mouseX;
+    let glowY = mouseY;
+
+    window.addEventListener('mousemove', event => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      cursorGlow.style.opacity = '1';
+    });
+
     function animateCursorGlow() {
-      /*
-      * Lower value = more smooth / laggy
-      * Higher value = faster response
-      */
       glowX += (mouseX - glowX) * 0.05;
       glowY += (mouseY - glowY) * 0.05;
 
       cursorGlow.style.left = `${glowX}px`;
       cursorGlow.style.top = `${glowY}px`;
 
-      requestAnimationFrame(
-        animateCursorGlow
-      );
+      requestAnimationFrame(animateCursorGlow);
     }
 
-    animateCursorGlow();
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      animateCursorGlow();
+    } else {
+      cursorGlow.style.display = 'none';
+    }
 
     window.addEventListener('mouseleave', () => {
       cursorGlow.style.opacity = '0';
@@ -2003,770 +1489,435 @@ STATS
       cursorGlow.style.opacity = '1';
     });
 
-
-
-    /*
-    =========================================================
-    
-    SCAN / VERIFY
-    
-    =========================================================
-    */
-
-    document
-      .getElementById('scanBtn')
-      .addEventListener(
-        'click',
-        async () => {
-
-          const btn =
-            document.getElementById(
-              'scanBtn'
-            );
-
-          const resultBox =
-            document.getElementById(
-              'result'
-            );
-
-          const errorBox =
-            document.getElementById(
-              'errorBox'
-            );
-
-          const dz1 =
-            document.getElementById(
-              'dz1'
-            );
-
-          const dz2 =
-            document.getElementById(
-              'dz2'
-            );
-
-          resultBox.classList.remove(
-            'show'
-          );
-
-          errorBox.classList.remove(
-            'show'
-          );
-
-          btn.disabled = true;
-
-          btn.classList.add(
-            'loading'
-          );
-
-          btn.textContent =
-            'Scanning...';
-
-          dz1.classList.add(
-            'scanning'
-          );
-
-          dz2.classList.add(
-            'scanning'
-          );
-
-          const formData =
-            new FormData();
-
-          formData.append(
-            'image1',
-            state.file1
-          );
-
-          formData.append(
-            'image2',
-            state.file2
-          );
-
-          try {
-
-            const res =
-              await fetch(
-                '/verify',
-                {
-                  method: 'POST',
-                  body: formData
-                }
-              );
-
-            const data =
-              await res.json();
-
-            if (!res.ok) {
-
-              throw new Error(
-                data.detail ||
-                'Verification failed.'
-              );
-
-            }
-
-            state.lastSimilarity =
-              data.similarity;
-
-            state.modelThreshold =
-              data.threshold;
-
-            const slider =
-              document.getElementById(
-                'thresholdSlider'
-              );
-
-            slider.value =
-              data.threshold;
-
-            document.getElementById(
-              'sliderValue'
-            ).textContent =
-              data.threshold.toFixed(3);
-
-            renderResult(
-              data.similarity,
-              data.threshold,
-              data.aligned1,
-              data.aligned2,
-              true
-            );
-
-            addToHistory(data);
-
-          } catch (err) {
-
-            showError(
-              err.message
-            );
-
-          } finally {
-
-            btn.disabled = false;
-
-            btn.classList.remove(
-              'loading'
-            );
-
-            dz1.classList.remove(
-              'scanning'
-            );
-
-            dz2.classList.remove(
-              'scanning'
-            );
-
-            updateButton();
-          }
-
-        }
-      );
-
-    /*
-    
-    =========================================================
-    
-    THRESHOLD SLIDER
-    
-    =========================================================
-    */
-
-    document
-      .getElementById(
-        'thresholdSlider'
-      )
-      .addEventListener(
-        'input',
-        e => {
-
-          const t =
-            parseFloat(
-              e.target.value
-            );
-
-          document.getElementById(
-            'sliderValue'
-          ).textContent =
-            t.toFixed(3);
-
-          if (
-            state.lastSimilarity !== null
-          ) {
-
-            renderResult(
-              state.lastSimilarity,
-              t,
-              null,
-              null,
-              false
-            );
-
-          }
-
-        }
-      );
-
-    /*
-    
-    =========================================================
-    
-    CONFIDENCE
-    
-    =========================================================
-    */
-
-    function confidenceLabel(
-      similarity,
-      threshold
-    ) {
-
-      const margin =
-        similarity - threshold;
-
-      const absMargin =
-        Math.abs(margin);
-
-      if (
-        absMargin > 0.25
-      ) {
-
-        return margin > 0
-          ? 'strong match'
-          : 'strong non-match';
-
-      }
-
-      if (
-        absMargin > 0.10
-      ) {
-
-        return margin > 0
-          ? 'likely match'
-          : 'likely non-match';
-
-      }
-
-      return 'borderline';
-
-    }
-
-    /*
-    
-    =========================================================
-    
-    NUMBER ANIMATION
-    
-    =========================================================
-    */
-
-    function animateNumber(
-      el,
-      from,
-      to,
-      duration = 700
-    ) {
-
-      const start =
-        performance.now();
-
-      function tick(now) {
-
-        const t =
-          Math.min(
-            1,
-            (now - start) / duration
-          );
-
-        const eased =
-          1 - Math.pow(
-            1 - t,
-            3
-          );
-
-        el.textContent =
-          (
-            from +
-            (to - from) * eased
-          ).toFixed(4);
-
-        if (t < 1) {
-          requestAnimationFrame(
-            tick
-          );
-        }
-
-      }
-
-      requestAnimationFrame(
-        tick
-      );
-
-    }
-
-    /*
-    
-    =========================================================
-    
-    RENDER RESULT
-    
-    =========================================================
-    */
-
-    function renderResult(
-      similarity,
-      threshold,
-      aligned1,
-      aligned2,
-      animate
-    ) {
-
-      const same =
-        similarity >= threshold;
-
-      const badge =
-        document.getElementById(
-          'badge'
-        );
-
-      const confidenceTag =
-        document.getElementById(
-          'confidenceTag'
-        );
-
-      const scoreText =
-        document.getElementById(
-          'scoreText'
-        );
-
-      const barFill =
-        document.getElementById(
-          'barFill'
-        );
-
-      const thresholdMark =
-        document.getElementById(
-          'thresholdMark'
-        );
-
-      const thresholdText =
-        document.getElementById(
-          'thresholdText'
-        );
-
-      const alignedPreview =
-        document.getElementById(
-          'alignedPreview'
-        );
-
-      badge.textContent =
-        same
-          ? 'SAME PERSON'
-          : 'DIFFERENT PERSON';
-
-      badge.className =
-        'badge ' +
-        (
-          same
-            ? 'same'
-            : 'diff'
-        );
-
-      confidenceTag.textContent =
-        confidenceLabel(
-          similarity,
-          threshold
-        );
-
-      if (animate) {
-
-        badge.classList.remove(
-          'reveal'
-        );
-
-        void badge.offsetWidth;
-
-        badge.classList.add(
-          'reveal'
-        );
-
-        animateNumber(
-          scoreText,
-          0,
-          similarity
-        );
-
-      } else {
-
-        scoreText.textContent =
-          similarity.toFixed(4);
-
-      }
-
-      const pct =
-        Math.max(
-          0,
-          Math.min(
-            1,
-            similarity
-          )
-        ) * 100;
-
-      barFill.className =
-        'bar-fill' +
-        (
-          same
-            ? ''
-            : ' diff'
-        );
-
-      thresholdMark.style.left =
-        (threshold * 100) + '%';
-
-      thresholdText.textContent =
-        'threshold ' +
-        threshold.toFixed(4);
-
-      if (
-        aligned1 &&
-        aligned2
-      ) {
-
-        document.getElementById(
-          'alignedImg1'
-        ).src = aligned1;
-
-        document.getElementById(
-          'alignedImg2'
-        ).src = aligned2;
-
-        alignedPreview.style.display =
-          'flex';
-      }
-
-      document
-        .getElementById('result')
-        .classList.add('show');
-
-      requestAnimationFrame(
-        () => {
-          barFill.style.width =
-            pct + '%';
-        }
-      );
-
-    }
-
-    /*
-    
-    =========================================================
-    
-    HISTORY
-    
-    =========================================================
-    */
-
-    function loadHistory() {
-
-      try {
-
-        return (
-          JSON.parse(
-            localStorage.getItem(
-              HISTORY_KEY
-            )
-          ) || []
-        );
-
-      } catch {
-
-        return [];
-
-      }
-
-    }
-
-    function saveHistory(items) {
-
-      localStorage.setItem(
-        HISTORY_KEY,
-        JSON.stringify(
-          items.slice(
-            0,
-            MAX_HISTORY
-          )
-        )
-      );
-
-    }
-
-    function addToHistory(data) {
-
-      const entry = {
-
-        thumb1:
-          data.aligned1,
-
-        thumb2:
-          data.aligned2,
-
-        similarity:
-          data.similarity,
-
-        threshold:
-          data.threshold,
-
-        same:
-          data.similarity >=
-          data.threshold,
-
-        time:
-          new Date().toLocaleTimeString(
-            [],
-            {
-              hour: '2-digit',
-              minute: '2-digit'
-            }
-          )
-
-      };
-
-      const items =
-        loadHistory();
-
-      items.unshift(entry);
-
-      saveHistory(items);
-
-      renderHistory();
-
-    }
-
-    function renderHistory() {
-
-      const list =
-        document.getElementById(
-          'historyList'
-        );
-
-      const items =
-        loadHistory();
-
-      if (
-        items.length === 0
-      ) {
-
-        list.innerHTML =
-          '<div class="history-empty">' +
-          'No comparisons yet this session.' +
-          '</div>';
-
+    /* VERIFY */
+
+    document.getElementById('scanBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('scanBtn');
+      const resultBox = document.getElementById('result');
+      const dz1 = document.getElementById('dz1');
+      const dz2 = document.getElementById('dz2');
+
+      if (!state.file1 || !state.file2 || btn.disabled) {
         return;
       }
 
-      list.innerHTML =
-        items
-          .map(
-            (it, i) => `
+      resultBox.classList.remove('show');
+      document.getElementById('errorBox').classList.remove('show');
 
-        <div
-          class="history-item"
-          onclick="restoreHistory(${i})"
-        >
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.textContent = 'Scanning...';
 
-          <div class="history-thumbs">
+      dz1.classList.add('scanning');
+      dz2.classList.add('scanning');
 
-            <img
-              src="${it.thumb1}"
-              alt="Face A"
-            >
+      const formData = new FormData();
+      formData.append('image1', state.file1);
+      formData.append('image2', state.file2);
 
-            <img
-              src="${it.thumb2}"
-              alt="Face B"
-            >
+      try {
+        const response = await fetch('/verify', {
+          method: 'POST',
+          body: formData
+        });
 
-          </div>
+        let data;
 
-          <div class="history-info">
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error('The server returned an unreadable response. Please try again.');
+        }
 
-            <div class="history-score">
-              ${it.similarity.toFixed(4)}
-            </div>
+        if (!response.ok) {
+          throw new Error(
+            typeof data.detail === 'string'
+              ? data.detail
+              : 'Verification failed. Please check the images and try again.'
+          );
+        }
 
-            <div class="history-time">
-              ${it.time}
-            </div>
+        if (
+          typeof data.similarity !== 'number' ||
+          typeof data.threshold !== 'number' ||
+          !Number.isFinite(data.similarity) ||
+          !Number.isFinite(data.threshold)
+        ) {
+          throw new Error('The server response contains an invalid similarity score or threshold.');
+        }
 
-          </div>
+        state.lastSimilarity = data.similarity;
+        state.modelThreshold = data.threshold;
 
-          <span
-            class="history-badge ${it.same
-                ? 'same'
-                : 'diff'
-              }"
-          >
-            ${it.same
-                ? 'SAME'
-                : 'DIFF'
-              }
-          </span>
+        const slider = document.getElementById('thresholdSlider');
+        slider.value = Math.max(0, Math.min(1, data.threshold));
 
-        </div>
+        document.getElementById('sliderValue').textContent =
+          Number(data.threshold).toFixed(3);
 
-      `
-          )
-          .join('');
+        renderResult(
+          data.similarity,
+          data.threshold,
+          data.aligned1,
+          data.aligned2,
+          true
+        );
 
+        addToHistory(data);
+
+      } catch (error) {
+        showError(error.message || 'Verification failed. Please try again.');
+      } finally {
+        btn.classList.remove('loading');
+        dz1.classList.remove('scanning');
+        dz2.classList.remove('scanning');
+        updateButton();
+      }
+    });
+
+    /* THRESHOLD SLIDER */
+
+    document.getElementById('thresholdSlider').addEventListener('input', event => {
+      const threshold = Number.parseFloat(event.target.value);
+
+      document.getElementById('sliderValue').textContent =
+        threshold.toFixed(3);
+
+      if (state.lastSimilarity !== null) {
+        renderResult(
+          state.lastSimilarity,
+          threshold,
+          null,
+          null,
+          false
+        );
+      }
+    });
+
+    /* DECISION LABEL */
+
+    function decisionLabel(similarity, threshold) {
+      const margin = similarity - threshold;
+
+      if (Math.abs(margin) <= NEAR_THRESHOLD_MARGIN) {
+        return 'Near threshold';
+      }
+
+      return margin > 0 ? 'Above threshold' : 'Below threshold';
+    }
+
+    /* NUMBER ANIMATION */
+
+    function animateNumber(element, from, to, duration = 700) {
+      const start = performance.now();
+
+      function tick(now) {
+        const progress = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+
+        element.textContent =
+          (from + (to - from) * eased).toFixed(4);
+
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        }
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    /* RENDER RESULT */
+
+    function renderResult(similarity, threshold, aligned1, aligned2, animate) {
+      const same = similarity >= threshold;
+
+      const badge = document.getElementById('badge');
+      const decisionTag = document.getElementById('confidenceTag');
+      const scoreText = document.getElementById('scoreText');
+      const barFill = document.getElementById('barFill');
+      const thresholdMark = document.getElementById('thresholdMark');
+      const thresholdText = document.getElementById('thresholdText');
+      const alignedPreview = document.getElementById('alignedPreview');
+
+      badge.textContent = same ? 'SAME PERSON' : 'DIFFERENT PERSON';
+      badge.className = `badge ${same ? 'same' : 'diff'}`;
+
+      decisionTag.textContent = decisionLabel(similarity, threshold);
+
+      if (animate) {
+        badge.classList.remove('reveal');
+        void badge.offsetWidth;
+        badge.classList.add('reveal');
+
+        animateNumber(scoreText, 0, similarity);
+      } else {
+        scoreText.textContent = similarity.toFixed(4);
+      }
+
+      /*
+       * The current UI displays similarity on a 0-1 scale.
+       * The bar is clamped to that visual range.
+       */
+      const percentage = Math.max(0, Math.min(1, similarity)) * 100;
+
+      barFill.className = `bar-fill${same ? '' : ' diff'}`;
+
+      thresholdMark.style.left =
+        `${Math.max(0, Math.min(1, threshold)) * 100}%`;
+
+      thresholdText.textContent = `threshold ${threshold.toFixed(4)}`;
+
+      if (aligned1 && aligned2) {
+        document.getElementById('alignedImg1').src = aligned1;
+        document.getElementById('alignedImg2').src = aligned2;
+        alignedPreview.style.display = 'flex';
+      }
+
+      resultBoxShow();
+
+      requestAnimationFrame(() => {
+        barFill.style.width = `${percentage}%`;
+      });
+    }
+
+    function resultBoxShow() {
+      document.getElementById('result').classList.add('show');
+    }
+
+    /* HISTORY */
+
+    function loadHistory() {
+      try {
+        const stored = safeStorageGet(HISTORY_KEY);
+        const parsed = stored ? JSON.parse(stored) : [];
+
+        if (!Array.isArray(parsed)) {
+          return [];
+        }
+
+        return parsed.filter(item =>
+          item &&
+          typeof item.similarity === 'number' &&
+          Number.isFinite(item.similarity) &&
+          typeof item.threshold === 'number' &&
+          Number.isFinite(item.threshold) &&
+          typeof item.same === 'boolean' &&
+          typeof item.time === 'string' &&
+          typeof item.thumb1 === 'string' &&
+          typeof item.thumb2 === 'string'
+        ).slice(0, MAX_HISTORY);
+      } catch {
+        return [];
+      }
+    }
+
+    function saveHistory(items) {
+      const saved = safeStorageSet(
+        HISTORY_KEY,
+        JSON.stringify(items.slice(0, MAX_HISTORY))
+      );
+
+      if (!saved) {
+        showError('Comparison completed, but browser storage could not save the history.');
+      }
+    }
+
+    function addToHistory(data) {
+      if (
+        typeof data.aligned1 !== 'string' ||
+        typeof data.aligned2 !== 'string'
+      ) {
+        return;
+      }
+
+      const entry = {
+        thumb1: data.aligned1,
+        thumb2: data.aligned2,
+        similarity: data.similarity,
+        threshold: data.threshold,
+        same: data.similarity >= data.threshold,
+        time: new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      };
+
+      const items = loadHistory();
+      items.unshift(entry);
+
+      saveHistory(items);
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const list = document.getElementById('historyList');
+      const items = loadHistory();
+
+      list.replaceChildren();
+
+      if (items.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'history-empty';
+        empty.textContent = 'No comparisons yet.';
+        list.appendChild(empty);
+        return;
+      }
+
+      items.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'history-item';
+        row.tabIndex = 0;
+        row.setAttribute('role', 'button');
+        row.setAttribute('aria-label', `Restore comparison ${index + 1}`);
+
+        const thumbs = document.createElement('div');
+        thumbs.className = 'history-thumbs';
+
+        const firstImage = document.createElement('img');
+        firstImage.src = item.thumb1;
+        firstImage.alt = 'Face A';
+
+        const secondImage = document.createElement('img');
+        secondImage.src = item.thumb2;
+        secondImage.alt = 'Face B';
+
+        thumbs.append(firstImage, secondImage);
+
+        const info = document.createElement('div');
+        info.className = 'history-info';
+
+        const score = document.createElement('div');
+        score.className = 'history-score';
+        score.textContent = item.similarity.toFixed(4);
+
+        const time = document.createElement('div');
+        time.className = 'history-time';
+        time.textContent = item.time;
+
+        info.append(score, time);
+
+        const badge = document.createElement('span');
+        badge.className = `history-badge ${item.same ? 'same' : 'diff'}`;
+        badge.textContent = item.same ? 'SAME' : 'DIFF';
+
+        row.append(thumbs, info, badge);
+
+        row.addEventListener('click', () => restoreHistory(index));
+
+        row.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            restoreHistory(index);
+          }
+        });
+
+        list.appendChild(row);
+      });
     }
 
     function restoreHistory(index) {
+      const item = loadHistory()[index];
 
-      const it =
-        loadHistory()[index];
-
-      if (!it) return;
-
-      state.lastSimilarity =
-        it.similarity;
-
-      const slider =
-        document.getElementById(
-          'thresholdSlider'
-        );
-
-      slider.value =
-        it.threshold;
-
-      document.getElementById(
-        'sliderValue'
-      ).textContent =
-        it.threshold.toFixed(3);
-
-      renderResult(
-        it.similarity,
-        it.threshold,
-        it.thumb1,
-        it.thumb2,
-        false
-      );
-
-    }
-
-    document
-      .getElementById(
-        'clearHistoryBtn'
-      )
-      .addEventListener(
-        'click',
-        () => {
-
-          localStorage.removeItem(
-            HISTORY_KEY
-          );
-
-          renderHistory();
-
-        }
-      );
-
-    /*
-    
-    =========================================================
-    
-    MODEL INFO
-    
-    =========================================================
-    */
-
-    async function loadModelInfo() {
-
-      try {
-
-        const res =
-          await fetch(
-            '/model-info'
-          );
-
-        const data =
-          await res.json();
-
-        const strip =
-          document.getElementById(
-            'statStrip'
-          );
-
-        const chips = [
-          data.model_pack
-        ];
-
-        if (
-          typeof data.eer ===
-          'number'
-        ) {
-
-          chips.push(
-            `EER ${(data.eer * 100)
-              .toFixed(2)
-            }%`
-          );
-
-        }
-
-        if (
-          typeof data.auc ===
-          'number'
-        ) {
-
-          chips.push(
-            `AUC ${data.auc.toFixed(4)
-            }`
-          );
-
-        }
-
-        strip.innerHTML =
-          chips
-            .map(
-              c =>
-                `<span class="stat-chip">${c}</span>`
-            )
-            .join('');
-
-        document.getElementById(
-          'statusDot'
-        ).style.background =
-          'var(--accent)';
-
-        document.getElementById(
-          'statusText'
-        ).textContent =
-          'Model ready';
-
-      } catch {
-
-        document.getElementById(
-          'statusText'
-        ).textContent =
-          'Model status unknown';
-
+      if (!item) {
+        return;
       }
 
+      state.lastSimilarity = item.similarity;
+      state.modelThreshold = item.threshold;
+
+      const slider = document.getElementById('thresholdSlider');
+      slider.value = Math.max(0, Math.min(1, item.threshold));
+
+      document.getElementById('sliderValue').textContent =
+        item.threshold.toFixed(3);
+
+      renderResult(
+        item.similarity,
+        item.threshold,
+        item.thumb1,
+        item.thumb2,
+        false
+      );
     }
 
-    /*
-    
-    =========================================================
-    
-    INITIALIZE
-    
-    =========================================================
-    */
+    document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+      const cleared = safeStorageRemove(HISTORY_KEY);
+
+      if (!cleared) {
+        showError('Could not clear comparison history from browser storage.');
+        return;
+      }
+
+      renderHistory();
+    });
+
+    /* MODEL STATUS */
+
+    async function loadModelInfo() {
+      const statusText = document.getElementById('statusText');
+      const statusDot = document.getElementById('statusDot');
+      const strip = document.getElementById('statStrip');
+
+      try {
+        const healthResponse = await fetch('/health');
+
+        if (!healthResponse.ok) {
+          throw new Error('Health endpoint returned an error.');
+        }
+
+        const health = await healthResponse.json();
+
+        if (!health.pipeline_loaded) {
+          statusText.textContent = 'Pipeline not ready';
+          statusDot.style.background = 'var(--danger)';
+          strip.replaceChildren();
+          return;
+        }
+
+        const infoResponse = await fetch('/model-info');
+        let info = {};
+
+        if (infoResponse.ok) {
+          info = await infoResponse.json();
+        }
+
+        const chips = [];
+
+        if (typeof info.model_pack === 'string') {
+          chips.push(info.model_pack);
+        }
+
+        if (typeof info.eer === 'number' && Number.isFinite(info.eer)) {
+          chips.push(`EER ${(info.eer * 100).toFixed(2)}%`);
+        }
+
+        if (typeof info.auc === 'number' && Number.isFinite(info.auc)) {
+          chips.push(`AUC ${info.auc.toFixed(4)}`);
+        }
+
+        strip.replaceChildren();
+
+        chips.forEach(label => {
+          const chip = document.createElement('span');
+          chip.className = 'stat-chip';
+          chip.textContent = label;
+          strip.appendChild(chip);
+        });
+
+        statusDot.style.background = 'var(--accent)';
+        statusText.textContent = 'Model ready';
+
+      } catch {
+        statusDot.style.background = 'var(--danger)';
+        statusText.textContent = 'Model status unknown';
+        strip.replaceChildren();
+      }
+    }
+
+    /* INITIALIZE */
 
     renderHistory();
-
     loadModelInfo();
-
   </script>
 </body>
-
 </html>
